@@ -10,7 +10,7 @@
 | [Darling Mota] | Data Engineer | [@darlingmota] |
 | [Titas Utrya] | Data Analyst | [@titas3012] |
 | [Prosper Umeh] | Visualization Lead | [@pruber] |
-| [Darling Mota] | Documentation Lead | [@darlingmota] |
+| [Nischal Rana] | Documentation Lead | [@NischalRana29] |
 
 ## Project Description
 
