@@ -18,9 +18,9 @@
 
 ## Dataset
 
-- **Name:** [Dataset name]
+- **Name:** [Energy and Utilities]
 - **Source:** [Source URL]
-- **Size:** [Approximate size]
+- **Size:** [~50,000+]
 - **Format:** CSV/JSON
 
 ## Project Structure 2026
