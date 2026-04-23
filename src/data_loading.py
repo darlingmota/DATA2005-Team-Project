@@ -65,3 +65,8 @@ def show_info(df):
         print(f"  Examples: {', '.join(energy_cols[:5])}")
 
 
+if __name__ == "__main__":
+    df = load_raw_data("data/raw/owid-energy-data.csv")
+    if df is not None:
+        validate_data(df)
+        show_info(df)
