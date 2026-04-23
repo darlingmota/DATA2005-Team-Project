@@ -21,3 +21,12 @@ def drop_sparse_columns(df, threshold=70):
     return df
 
 
+def filter_modern_data(df, min_year=2000):
+    
+    before = len(df)
+    df = df[df['year'] >= min_year]
+    removed = before - len(df)
+    
+    print(f"filtered to {min_year}+: removed {removed:,} rows")
+    return df
+
