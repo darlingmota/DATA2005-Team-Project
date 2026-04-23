@@ -88,3 +88,16 @@ def select_key_columns(df):
         'nuclear_electricity', 'biofuel_electricity'
     ]
     
+    per_capita = [col for col in df.columns if 'per_capita' in col]
+    engineered = [col for col in df.columns if col.startswith(('renewable_', 'fossil_', 'coal_', 'nuclear_'))]
+    cols_to_keep = list(set(keep + primary + sources + electricity + per_capita + engineered))
+    cols_to_keep = [col for col in cols_to_keep if col in df.columns]
+    if 'country' not in cols_to_keep:
+        cols_to_keep.insert(0, 'country')
+    if 'year' not in cols_to_keep:
+        cols_to_keep.insert(1, 'year')
+    
+    dropped = len(df.columns) - len(cols_to_keep)
+    print(f"selected {len(cols_to_keep)} key columns (dropped {dropped} irrelevant columns)")
+    
+    return df[cols_to_keep]
