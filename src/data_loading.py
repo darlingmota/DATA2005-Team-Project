@@ -36,6 +36,7 @@ def validate_data(df):
     print(f"Total missing values: {results['missing_total']:,}")
     print(f"Duplicate rows: {results['duplicates']}")
     
+   
     missing_cols = (df.isnull().sum() / len(df) * 100).sort_values(ascending=False)
     cols_90pct_missing = (missing_cols > 90).sum()
     cols_50pct_missing = (missing_cols > 50).sum()
@@ -51,14 +52,18 @@ def show_info(df):
     
     print("\n Data Info")
     
+    
     print(f"\nCountries/Regions: {df['country'].nunique()}")
     print(f"Sample countries: {', '.join(df['country'].unique()[:5])}")
     
+  
     print(f"\nTime period: {df['year'].min()} to {df['year'].max()}")
     
+   
     numeric_cols = df.select_dtypes(include=['float64', 'int64']).columns
     print(f"\nNumeric columns: {len(numeric_cols)}")
     
+  
     energy_cols = [col for col in df.columns if 'energy' in col or 'electricity' in col or 'consumption' in col]
     print(f"columns related to energy: {len(energy_cols)}")
     if energy_cols:
