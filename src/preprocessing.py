@@ -19,3 +19,5 @@ def drop_sparse_columns(df, threshold=70):
     
     print(f"dropped {before_cols - after_cols} sparse columns (>{threshold}% missing)")
     return df
+
+
