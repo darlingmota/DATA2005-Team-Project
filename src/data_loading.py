@@ -36,3 +36,11 @@ def validate_data(df):
     print(f"Total missing values: {results['missing_total']:,}")
     print(f"Duplicate rows: {results['duplicates']}")
     
+    missing_cols = (df.isnull().sum() / len(df) * 100).sort_values(ascending=False)
+    cols_90pct_missing = (missing_cols > 90).sum()
+    cols_50pct_missing = (missing_cols > 50).sum()
+    
+    print(f"Columns >50% missing: {cols_50pct_missing}")
+    print(f"Columns >90% missing: {cols_90pct_missing}")
+    
+    return results
