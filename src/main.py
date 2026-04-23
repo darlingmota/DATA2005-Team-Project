@@ -45,3 +45,11 @@ def main():
     
     raw_file = "data/raw/owid-energy-data.csv"
     clean_file = "data/processed/owid-energy-clean.csv"
+    print("\nload")
+    
+    df_raw = load_raw_data(raw_file)
+    
+    if df_raw is None:
+        print("failed to load. Check file path.")
+        return False
+    
