@@ -44,3 +44,5 @@ def validate_data(df):
     print(f"Columns >90% missing: {cols_90pct_missing}")
     
     return results
+
+
