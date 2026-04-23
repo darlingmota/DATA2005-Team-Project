@@ -61,3 +61,15 @@ def main():
     
     df_clean = preprocess(df_raw.copy())
     
+    summarise(df_raw, df_clean)
+    print("\nexport ")
+    export_data(df_clean, clean_file)
+    
+    print("\npipline complete\n")
+    return True
+
+
+if __name__ == "__main__":
+    success = main()
+    if not success:
+        print("pipeline failed pls try again.")
