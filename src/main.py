@@ -24,3 +24,13 @@ def summarise(df_raw, df_clean):
     print(f"\nCOVERAGE:")
     print(f"  Countries: {countries}")
     print(f"  Years: {years_min}-{years_max}")
+    
+
+
+
+def export_data(df, output_file):
+    Path(output_file).parent.mkdir(parents=True, exist_ok=True)
+    df.to_csv(output_file, index=False)
+    size_mb = Path(output_file).stat().st_size / (1024*1024)
+    print(f"exported to: {output_file}")
+    print(f"size: {size_mb:.1f} MB")
