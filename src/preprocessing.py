@@ -71,3 +71,20 @@ def engineer_features(df):
     
     print("created features: renewable_elec_share, fossil_renewable_ratio, coal_elec_share, nuclear_elec_share")
     return df
+
+
+def select_key_columns(df):
+    keep = ['country', 'year', 'iso_code', 'population', 'gdp']
+    
+    primary = ['electricity_generation', 'primary_energy_consumption']
+    sources = [
+        'fossil_fuel_consumption', 'coal_consumption', 'gas_consumption', 'oil_consumption',
+        'renewables_consumption', 'solar_consumption', 'wind_consumption', 'hydro_consumption',
+        'nuclear_consumption', 'biofuel_consumption'
+    ]
+    electricity = [
+        'fossil_electricity', 'coal_electricity', 'gas_electricity', 'oil_electricity',
+        'renewables_electricity', 'solar_electricity', 'wind_electricity', 'hydro_electricity',
+        'nuclear_electricity', 'biofuel_electricity'
+    ]
+    
