@@ -15,3 +15,5 @@ def load_raw_data(filepath):
     except Exception as e:
         print(f"error loading file pls try again: {e}")
         return None
+
+
