@@ -30,3 +30,10 @@ def filter_modern_data(df, min_year=2000):
     print(f"filtered to {min_year}+: removed {removed:,} rows")
     return df
 
+
+def remove_duplicates(df):
+    dupes = df.duplicated().sum()
+    if dupes > 0:
+        df = df.drop_duplicates().reset_index(drop=True)
+        print(f"removed {dupes} duplicate rows")
+    return df
