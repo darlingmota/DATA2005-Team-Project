@@ -17,3 +17,13 @@ def load_raw_data(filepath):
         return None
 
 
+def validate_data(df):
+    
+    results = {
+        'rows': len(df),
+        'columns': len(df.columns),
+        'missing_total': df.isnull().sum().sum(),
+        'duplicates': df.duplicated().sum(),
+        'countries': df['country'].nunique() if 'country' in df.columns else 0,
+        'years': (df['year'].max() - df['year'].min() + 1) if 'year' in df.columns else 0,
+    }
