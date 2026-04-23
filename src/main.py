@@ -19,6 +19,7 @@ def summarise(df_raw, df_clean):
     print("  Energy sources: fossil, coal, gas, oil, renewables, nuclear")
     print("  Electricity: by source (coal, gas, solar, wind, nuclear, etc.)")
     print("  Engineered: renewable_elec_share, coal_elec_share, nuclear_elec_share")
+    
     countries = df_clean['country'].nunique()
     years_min, years_max = df_clean['year'].min(), df_clean['year'].max()
     print(f"\nCOVERAGE:")
@@ -34,3 +35,13 @@ def export_data(df, output_file):
     size_mb = Path(output_file).stat().st_size / (1024*1024)
     print(f"exported to: {output_file}")
     print(f"size: {size_mb:.1f} MB")
+
+
+def main():
+    
+    
+    print("\nour world in data energy pipeline")
+    
+    
+    raw_file = "data/raw/owid-energy-data.csv"
+    clean_file = "data/processed/owid-energy-clean.csv"
