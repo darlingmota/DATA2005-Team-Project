@@ -53,3 +53,7 @@ def main():
         print("failed to load. Check file path.")
         return False
     
+    print("\nvalidate")
+   
+    validate_data(df_raw)
+    show_info(df_raw)
