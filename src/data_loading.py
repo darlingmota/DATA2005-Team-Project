@@ -46,3 +46,20 @@ def validate_data(df):
     return results
 
 
+def show_info(df):
+    
+    
+    print("\n Data Info")
+    
+    print(f"\nCountries/Regions: {df['country'].nunique()}")
+    print(f"Sample countries: {', '.join(df['country'].unique()[:5])}")
+    
+    print(f"\nTime period: {df['year'].min()} to {df['year'].max()}")
+    
+    numeric_cols = df.select_dtypes(include=['float64', 'int64']).columns
+    print(f"\nNumeric columns: {len(numeric_cols)}")
+    
+    energy_cols = [col for col in df.columns if 'energy' in col or 'electricity' in col or 'consumption' in col]
+    print(f"columns related to energy: {len(energy_cols)}")
+    if energy_cols:
+        print(f"  Examples: {', '.join(energy_cols[:5])}")
