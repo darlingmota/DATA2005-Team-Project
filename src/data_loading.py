@@ -63,3 +63,5 @@ def show_info(df):
     print(f"columns related to energy: {len(energy_cols)}")
     if energy_cols:
         print(f"  Examples: {', '.join(energy_cols[:5])}")
+
+
