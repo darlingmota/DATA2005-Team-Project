@@ -37,3 +37,21 @@ def remove_duplicates(df):
         df = df.drop_duplicates().reset_index(drop=True)
         print(f"removed {dupes} duplicate rows")
     return df
+
+
+def handle_missing(df):
+    
+    key_cols = ['electricity_generation', 'fossil_fuel_consumption', 'renewables_electricity']
+    key_cols = [col for col in key_cols if col in df.columns]
+    
+    if not key_cols:
+        print("warning: No key energy columns found, skipping missing value filter")
+        return df
+    
+    before = len(df)
+    df = df.dropna(subset=key_cols, how='any')
+    removed = before - len(df)
+    
+    if removed > 0:
+        print(f"removed {removed:,} rows missing key energy columns")
+    return df
