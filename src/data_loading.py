@@ -35,3 +35,4 @@ def validate_data(df):
     print(f"Year range: {df['year'].min()} to {df['year'].max()}")
     print(f"Total missing values: {results['missing_total']:,}")
     print(f"Duplicate rows: {results['duplicates']}")
+    
