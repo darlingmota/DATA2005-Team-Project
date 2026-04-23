@@ -122,3 +122,34 @@ def fill_missing(df):
         print(f"forward/backward filled {filled:,} missing values")
     
     return df
+
+
+def preprocess(df):
+    
+    
+    print("\npreprocessing")
+    
+    
+    print("\ncleaning")
+    df = drop_sparse_columns(df, threshold=70)
+    df = filter_modern_data(df, min_year=2000)
+    df = remove_duplicates(df)
+    
+    print("\nfeature engineering")
+    df = engineer_features(df)
+    
+    print("\n selection")
+    df = select_key_columns(df)
+    
+    print("\n handle missing")
+    df = handle_missing(df)
+    df = fill_missing(df)
+    
+    
+    return df
+
+
+if __name__ == "__main__":
+    df = pd.read_csv("data/raw/owid-energy-data.csv")
+    df = preprocess(df)
+    print(f"Output shape: {df.shape}")
