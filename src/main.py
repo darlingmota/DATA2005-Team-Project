@@ -1,3 +1,5 @@
+
+
 import pandas as pd
 from pathlib import Path
 from data_loading import load_raw_data, validate_data, show_info
@@ -5,6 +7,7 @@ from preprocessing import preprocess
 
 
 def summarise(df_raw, df_clean):
+    
     
     print("\nSummary")
     
@@ -20,6 +23,7 @@ def summarise(df_raw, df_clean):
     print("  Electricity: by source (coal, gas, solar, wind, nuclear, etc.)")
     print("  Engineered: renewable_elec_share, coal_elec_share, nuclear_elec_share")
     
+    
     countries = df_clean['country'].nunique()
     years_min, years_max = df_clean['year'].min(), df_clean['year'].max()
     print(f"\nCOVERAGE:")
@@ -30,6 +34,7 @@ def summarise(df_raw, df_clean):
 
 
 def export_data(df, output_file):
+    """Save cleaned data to CSV."""
     Path(output_file).parent.mkdir(parents=True, exist_ok=True)
     df.to_csv(output_file, index=False)
     size_mb = Path(output_file).stat().st_size / (1024*1024)
@@ -40,11 +45,15 @@ def export_data(df, output_file):
 def main():
     
     
+    
     print("\nour world in data energy pipeline")
     
     
+  
     raw_file = "data/raw/owid-energy-data.csv"
     clean_file = "data/processed/owid-energy-clean.csv"
+    
+   
     print("\nload")
     
     df_raw = load_raw_data(raw_file)
@@ -53,15 +62,21 @@ def main():
         print("failed to load. Check file path.")
         return False
     
+    
     print("\nvalidate")
    
     validate_data(df_raw)
     show_info(df_raw)
+    
+    
     print("\nclean n transform")
     
     df_clean = preprocess(df_raw.copy())
     
+   
     summarise(df_raw, df_clean)
+    
+  
     print("\nexport ")
     export_data(df_clean, clean_file)
     
