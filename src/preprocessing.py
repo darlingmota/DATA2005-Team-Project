@@ -55,3 +55,19 @@ def handle_missing(df):
     if removed > 0:
         print(f"removed {removed:,} rows missing key energy columns")
     return df
+
+
+def engineer_features(df):
+    if 'renewables_electricity' in df.columns and 'electricity_generation' in df.columns:
+        df['renewable_elec_share'] = (df['renewables_electricity'] / df['electricity_generation'] * 100).round(2)
+    if 'fossil_fuel_consumption' in df.columns and 'renewables_consumption' in df.columns:
+        df['fossil_renewable_ratio'] = (df['fossil_fuel_consumption'] / (df['renewables_consumption'] + 1)).round(2)
+    
+    if 'coal_electricity' in df.columns and 'electricity_generation' in df.columns:
+        df['coal_elec_share'] = (df['coal_electricity'] / df['electricity_generation'] * 100).round(2)
+    
+    if 'nuclear_electricity' in df.columns and 'electricity_generation' in df.columns:
+        df['nuclear_elec_share'] = (df['nuclear_electricity'] / df['electricity_generation'] * 100).round(2)
+    
+    print("created features: renewable_elec_share, fossil_renewable_ratio, coal_elec_share, nuclear_elec_share")
+    return df
