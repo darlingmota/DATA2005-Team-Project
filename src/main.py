@@ -57,3 +57,7 @@ def main():
    
     validate_data(df_raw)
     show_info(df_raw)
+    print("\nclean n transform")
+    
+    df_clean = preprocess(df_raw.copy())
+    
