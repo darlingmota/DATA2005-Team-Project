@@ -101,3 +101,24 @@ def select_key_columns(df):
     print(f"selected {len(cols_to_keep)} key columns (dropped {dropped} irrelevant columns)")
     
     return df[cols_to_keep]
+
+
+def fill_missing(df):
+    
+    before_na = df.isnull().sum().sum()
+    
+    if before_na == 0:
+        print("no missing values to fill")
+        return df
+    
+    df = df.sort_values(['country', 'year']).reset_index(drop=True)
+    df = df.groupby('country', group_keys=False).apply(lambda x: x.ffill()).reset_index(drop=True)
+    df = df.groupby('country', group_keys=False).apply(lambda x: x.bfill()).reset_index(drop=True)
+    
+    after_na = df.isnull().sum().sum()
+    filled = before_na - after_na
+    
+    if filled > 0:
+        print(f"forward/backward filled {filled:,} missing values")
+    
+    return df
