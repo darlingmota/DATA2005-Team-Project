@@ -14,13 +14,52 @@
 
 ## Project Description
 
-[Brief description of your project and chosen domain]
+This project processes the Our World in Data (OWID) World Energy Consumpiton dataset to analyse how the global energy mix has shifted between fossil fuels and low carbon sources. The pipeline loads the raw country level annual data, drops sparse indicators, filters to the modern year(2000+), engineers four energy mix share features, and produces a cleaned dataset ready for statistical analysis and visualization. Final outputs are exported in CSV and JSON formats. 
 
 ## Dataset
 
-- **Name:** [Energy and Utilities]
-- **Source:** [Source URL]
-- **Size:** [~50,000+]
+- **Name:** [World Energy Consumption]
+- **Source:** [\[[Source URL](https://www.kaggle.com/datasets/pralabhpoudel/world-energy-consumption)\]](https://www.kaggle.com/datasets/pralabhpoudel/world-energy-consumption)
+- **Size:** [~20,000+]
 - **Format:** CSV/JSON
 
 ## Project Structure 2026
+
+## Repository Structure 
+DATA2005-TEAM-PROJECT/
+
+|__ data/
+| |__processed/
+| | |-- .gitkeep
+| | |__ owid-energy-clean.csv
+| |__raw/
+| | |-- .gitkeep
+| | |__ oid-energy-data.csv
+
+|__ output/
+| |__ figures/
+| | |__ .gitkeep
+| |__ reports/
+| | |__ .gitkeep
+
+|__ src
+| |-- __init__.py
+| |-- analysis.py
+| |-- data_loading.py
+| |-- main.py
+| |-- preprocessing.py
+| |__ visualization.py
+
+|__ LINCENSE
+
+|__ README.md   <-- this file
+
+## Setup
+
+Requirements
+- Python >= 3.12
+
+Installation
+
+## Data Acquisition
+Kaggle 
