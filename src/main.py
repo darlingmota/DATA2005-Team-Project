@@ -19,3 +19,8 @@ def summarise(df_raw, df_clean):
     print("  Energy sources: fossil, coal, gas, oil, renewables, nuclear")
     print("  Electricity: by source (coal, gas, solar, wind, nuclear, etc.)")
     print("  Engineered: renewable_elec_share, coal_elec_share, nuclear_elec_share")
+    countries = df_clean['country'].nunique()
+    years_min, years_max = df_clean['year'].min(), df_clean['year'].max()
+    print(f"\nCOVERAGE:")
+    print(f"  Countries: {countries}")
+    print(f"  Years: {years_min}-{years_max}")
