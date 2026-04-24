@@ -73,3 +73,10 @@ def top_n_consumers(df, n=10, value_column="electricity_generation",
         top = totals.nlargest(n, value_column)
 
     return top.reset_index(drop=True)
+                        
+
+def detect_consumption_anomalies(df, value_column="electricity_generation",
+                                z_threshold=3.0):
+    
+    df = df.copy()
+
