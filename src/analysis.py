@@ -123,4 +123,10 @@ def zscore_across_countries(df, value_column="electricity_generation"):
     year_mean = df.groupby("year")[value_column].transform("mean")
     year_std = df.groupby("year")[value_column].transform("std")
 
- 
+    # z-score calculation
+    df[value_column + "_zscore"] = np.where(
+        year_std > 0,
+        (df[value_column] - year_mean) / year_std,
+        0.0,
+    )
+    return df
