@@ -58,7 +58,6 @@ def find_peak_year_per_country(df, value_column="electricity_generation"):
     peaks = peaks.sort_values("peak_value", ascending=False).reset_index(drop=True)
     return peaks
 
-
 def top_n_consumers(df, n=10, value_column="electricity_generation",
                     year=None):
 
@@ -74,7 +73,6 @@ def top_n_consumers(df, n=10, value_column="electricity_generation",
 
     return top.reset_index(drop=True)
                         
-
 def detect_consumption_anomalies(df, value_column="electricity_generation",
                                 z_threshold=3.0):
     
@@ -91,3 +89,12 @@ def detect_consumption_anomalies(df, value_column="electricity_generation",
         (df[value_column] - country_mean) / country_std,
         0.0,
     )
+
+
+
+
+  # Keep only the anomalies
+    anomalies = df[np.abs(df["z_score"]) > z_threshold].copy()
+    anomalies = anomalies[["country", "year", value_column, "z_score"]]
+    anomalies = anomalies.sort_values("z_score", key=np.abs, ascending=False)
+    return anomalies.reset_index(drop=True)
