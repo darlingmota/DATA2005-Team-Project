@@ -96,8 +96,6 @@ def detect_consumption_anomalies(df, value_column="electricity_generation",
     anomalies = anomalies.sort_values("z_score", key=np.abs, ascending=False)
     return anomalies.reset_index(drop=True)
 
-
-
 # Task 3: Normalise and transform metrics
 def per_capita_normalisation(df, value_column="electricity_generation"):
 
@@ -107,8 +105,6 @@ def per_capita_normalisation(df, value_column="electricity_generation"):
     values = df[value_column].to_numpy()
     population = df["population"].to_numpy()
 
-
-    
     # Make an output array full of NaN, then fill where population is valid
     result = np.full_like(values, np.nan, dtype=float)
     valid = (population > 0) & ~np.isnan(population)
@@ -119,6 +115,12 @@ def per_capita_normalisation(df, value_column="electricity_generation"):
     return df
 
 
+def zscore_across_countries(df, value_column="electricity_generation"):
 
+    df = df.copy()
 
+    # Mean and std across all countries each year
+    year_mean = df.groupby("year")[value_column].transform("mean")
+    year_std = df.groupby("year")[value_column].transform("std")
 
+ 
