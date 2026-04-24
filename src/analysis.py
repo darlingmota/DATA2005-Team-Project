@@ -228,14 +228,14 @@ if __name__ == "__main__":
 
     results = run_full_analysis(test_df)
 
-    print("\n--- Summary statistics (electricity_generation) ---")
+    print("\n--- Summary Statistics (electricity_generation) ---")
     for key, value in results["summary"].items():
         print(f"  {key:20s}: {value:,.2f}")
 
-    print("\n--- Top 10 consumers (all time) ---")
+    print("\n--- Top 10 Consumers ---")
     print(results["top_10_all_time"].to_string(index=False))
 
-    print("\n--- Top 5 anomalies detected ---")
+    print("\n--- Top 5 Anomalies Found ---")
     print(results["anomalies"].head().to_string(index=False))
 
     print("\nAnalysis complete.")
