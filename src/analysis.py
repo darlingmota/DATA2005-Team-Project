@@ -57,3 +57,19 @@ def find_peak_year_per_country(df, value_column="electricity_generation"):
                                 value_column: "peak_value"})
     peaks = peaks.sort_values("peak_value", ascending=False).reset_index(drop=True)
     return peaks
+
+
+def top_n_consumers(df, n=10, value_column="electricity_generation",
+                    year=None):
+
+    if year is not None:
+        # Filter to one year
+        one_year = df[df["year"] == year].copy()
+        top = one_year.nlargest(n, value_column)
+        top = top[["country", "year", value_column]]
+    else:
+        # Sum across all years then take the biggest
+        totals = df.groupby("country")[value_column].sum().reset_index()
+        top = totals.nlargest(n, value_column)
+
+    return top.reset_index(drop=True)
