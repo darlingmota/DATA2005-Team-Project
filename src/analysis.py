@@ -190,3 +190,85 @@ def correlation_matrix(df, columns=None):
     columns = [c for c in columns if c in df.columns]
 
     return df[columns].corr()
+
+# Runs the whole analysis in one call
+def run_full_analysis(df, value_column="electricity_generation"):
+    
+    # Only look at real countries 
+    countries = get_real_countries_only(df)
+
+    results = {
+        "yearly": aggregate_by_year(countries, value_column),
+        "by_decade": aggregate_by_decade(countries, value_column),
+        "by_country": aggregate_by_country(countries, value_column),
+        "peak_year_per_country": find_peak_year_per_country(countries,
+                                                            value_column),
+        "top_10_all_time": top_n_consumers(countries, n=10,
+                                        value_column=value_column),
+        "top_10_latest_year": top_n_consumers(
+            countries, n=10, value_column=value_column,
+            year=int(countries["year"].max())
+        ),
+        "anomalies": detect_consumption_anomalies(countries, value_column),
+        "per_capita": per_capita_normalisation(countries, value_column),
+        "zscore_by_year": zscore_across_countries(countries, value_column),
+        "energy_mix": energy_mix_shares(countries),
+        "summary": summary_statistics(countries, value_column),
+        "correlations": correlation_matrix(countries),
+    }
+
+    return results
+
+if __name__ == "__main__":
+    # preprocessing.py will pass the cleaned df in
+    print("Running analysis.py self-test...")
+    # Dataset
+    test_df = pd.read_excel("owid-energy-clean.xlsx")
+    print(f"Loaded {len(test_df)} rows.")
+
+    results = run_full_analysis(test_df)
+
+    print("\n--- Summary statistics (electricity_generation) ---")
+    for key, value in results["summary"].items():
+        print(f"  {key:20s}: {value:,.2f}")
+
+    print("\n--- Top 10 consumers (all time) ---")
+    print(results["top_10_all_time"].to_string(index=False))
+
+    print("\n--- Top 5 anomalies detected ---")
+    print(results["anomalies"].head().to_string(index=False))
+
+    print("\nAnalysis complete.")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
