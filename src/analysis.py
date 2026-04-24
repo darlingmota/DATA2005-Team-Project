@@ -239,36 +239,3 @@ if __name__ == "__main__":
     print(results["anomalies"].head().to_string(index=False))
 
     print("\nAnalysis complete.")
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
