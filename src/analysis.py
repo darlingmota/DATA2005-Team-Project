@@ -130,3 +130,50 @@ def zscore_across_countries(df, value_column="electricity_generation"):
         0.0,
     )
     return df
+
+def energy_mix_shares(df):
+
+    df = df.copy()
+
+    # Stack the five source columns into one 2D array 
+    sources = ["coal_electricity", "gas_electricity", "nuclear_electricity",
+            "hydro_electricity", "renewables_electricity"]
+    source_matrix = df[sources].to_numpy()
+
+    # Total generation per row 
+    # use np.nansum so missing values are treated as zero in the total
+    row_totals = np.nansum(source_matrix, axis=1)
+
+    safe_totals = np.where(row_totals > 0, row_totals, np.nan)
+    shares = source_matrix / safe_totals[:, None]
+
+    # Put the results back as new columns
+    for i, source in enumerate(sources):
+        share_name = "share_" + source.replace("_electricity", "")
+        df[share_name] = shares[:, i]
+
+    return df
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
