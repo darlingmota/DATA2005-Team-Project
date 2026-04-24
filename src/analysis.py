@@ -84,15 +84,10 @@ def detect_consumption_anomalies(df, value_column="electricity_generation",
     country_mean = df.groupby("country")[value_column].transform("mean")
     country_std = df.groupby("country")[value_column].transform("std")
 
-    # Vectorised z-score calculation: (x - mean) / std
-    # np.where guards against divide by zero for countries with zero variance
+    # Calculate z-score: (value - mean) / std
+    # Used np.where because some countries have zero std and that breaks division
     df["z_score"] = np.where(
         country_std > 0,
         (df[value_column] - country_mean) / country_std,
         0.0,
     )
-
-
-
-
-
