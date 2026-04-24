@@ -30,3 +30,16 @@ def aggregate_by_decade(df, value_column="electricity_generation"):
         std="std",
     ).reset_index()
     return decade_stats
+
+def aggregate_by_country(df, value_column="electricity_generation"):
+
+    country_stats = df.groupby("country")[value_column].agg(
+        total="sum",
+        mean="mean",
+        min="min",
+        max="max",
+        std="std",
+    ).reset_index()
+    # Sort biggest first 
+    country_stats = country_stats.sort_values("total", ascending=False)
+    return country_stats
