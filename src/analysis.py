@@ -153,27 +153,40 @@ def energy_mix_shares(df):
         df[share_name] = shares[:, i]
 
     return df
+    
+
+# Task 4: Summary statistics using NumPy
+def summary_statistics(df, value_column="electricity_generation"):
+    
+    values = df[value_column].to_numpy()
+
+    # np.nanpercentile computes multiple percentiles in one vectorised call
+    percentiles = np.nanpercentile(values, [25, 50, 75, 95])
+
+    stats = {
+        "mean": np.nanmean(values),
+        "median": np.nanmedian(values),
+        "std": np.nanstd(values),
+        "variance": np.nanvar(values),
+        "min": np.nanmin(values),
+        "max": np.nanmax(values),
+        "percentile_25": percentiles[0],
+        "percentile_50": percentiles[1],
+        "percentile_75": percentiles[2],
+        "percentile_95": percentiles[3],
+        "n_observations": int(np.sum(~np.isnan(values))),
+    }
+    return stats
 
 
+def correlation_matrix(df, columns=None):
 
+    if columns is None:
+        columns = ["electricity_generation", "gdp", "population",
+                "per_capita_electricity", "fossil_share_elec",
+                "renewable_elec_share", "nuclear_share_elec"]
 
+    # Keep only columns that actually exist 
+    columns = [c for c in columns if c in df.columns]
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    return df[columns].corr()
