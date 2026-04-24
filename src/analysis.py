@@ -8,7 +8,6 @@ def get_real_countries_only(df):
 
 # Task 1: Resampling 
 def aggregate_by_year(df, value_column="electricity_generation"):
-
     # Group by year and calculate a few summary stats in one go
     yearly = df.groupby("year")[value_column].agg(
         total="sum",
@@ -19,7 +18,6 @@ def aggregate_by_year(df, value_column="electricity_generation"):
     return yearly
 
 def aggregate_by_decade(df, value_column="electricity_generation"):
-
     # Create a decade column using integer division 
     df = df.copy()
     df["decade"] = (df["year"] // 10) * 10
@@ -79,4 +77,3 @@ def detect_consumption_anomalies(df, value_column="electricity_generation",
                                 z_threshold=3.0):
     
     df = df.copy()
-
