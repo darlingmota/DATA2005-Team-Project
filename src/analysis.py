@@ -89,12 +89,16 @@ def detect_consumption_anomalies(df, value_column="electricity_generation",
         (df[value_column] - country_mean) / country_std,
         0.0,
     )
-
-
-
-
+                                    
   # Keep only the anomalies
     anomalies = df[np.abs(df["z_score"]) > z_threshold].copy()
     anomalies = anomalies[["country", "year", value_column, "z_score"]]
     anomalies = anomalies.sort_values("z_score", key=np.abs, ascending=False)
     return anomalies.reset_index(drop=True)
+                                    
+
+# Task 3: Normalise and transform metrics
+def per_capita_normalisation(df, value_column="electricity_generation"):
+
+    df = df.copy()
+
