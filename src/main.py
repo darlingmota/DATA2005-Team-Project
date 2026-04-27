@@ -49,11 +49,11 @@ def main():
     print("\nour world in data energy pipeline")
     
     
-  
+
     raw_file = "data/raw/owid-energy-data.csv"
     clean_file = "data/processed/owid-energy-clean.csv"
     
-   
+
     print("\nload")
     
     df_raw = load_raw_data(raw_file)
@@ -64,7 +64,7 @@ def main():
     
     
     print("\nvalidate")
-   
+
     validate_data(df_raw)
     show_info(df_raw)
     
@@ -73,10 +73,10 @@ def main():
     
     df_clean = preprocess(df_raw.copy())
     
-   
+
     summarise(df_raw, df_clean)
     
-  
+
     print("\nexport ")
     export_data(df_clean, clean_file)
     

@@ -78,7 +78,7 @@ def detect_consumption_anomalies(df, value_column="electricity_generation",
     
     df = df.copy()
 
-   # Country mean and std
+    # Country mean and std
     country_mean = df.groupby("country")[value_column].transform("mean")
     country_std = df.groupby("country")[value_column].transform("std")
 
@@ -90,7 +90,7 @@ def detect_consumption_anomalies(df, value_column="electricity_generation",
         0.0,
     )
                                     
-  # Keep only the anomalies
+    # Keep only the anomalies
     anomalies = df[np.abs(df["z_score"]) > z_threshold].copy()
     anomalies = anomalies[["country", "year", value_column, "z_score"]]
     anomalies = anomalies.sort_values("z_score", key=np.abs, ascending=False)
@@ -101,7 +101,7 @@ def per_capita_normalisation(df, value_column="electricity_generation"):
 
     df = df.copy()
 
- # NumPy divide with 'where' argument avoids division by zero or by NaN
+    # NumPy divide with 'where' argument avoids division by zero or by NaN
     values = df[value_column].to_numpy()
     population = df["population"].to_numpy()
 

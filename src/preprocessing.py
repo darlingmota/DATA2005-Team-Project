@@ -64,7 +64,7 @@ def handle_missing(df):
 def engineer_features(df):
     
     
-   
+
     if 'renewables_electricity' in df.columns and 'electricity_generation' in df.columns:
         df['renewable_elec_share'] = (df['renewables_electricity'] / df['electricity_generation'] * 100).round(2)
     
@@ -76,7 +76,7 @@ def engineer_features(df):
     if 'coal_electricity' in df.columns and 'electricity_generation' in df.columns:
         df['coal_elec_share'] = (df['coal_electricity'] / df['electricity_generation'] * 100).round(2)
     
-   
+
     if 'nuclear_electricity' in df.columns and 'electricity_generation' in df.columns:
         df['nuclear_elec_share'] = (df['nuclear_electricity'] / df['electricity_generation'] * 100).round(2)
     
@@ -92,7 +92,7 @@ def select_key_columns(df):
     
     primary = ['electricity_generation', 'primary_energy_consumption']
     
-   
+
     sources = [
         'fossil_fuel_consumption', 'coal_consumption', 'gas_consumption', 'oil_consumption',
         'renewables_consumption', 'solar_consumption', 'wind_consumption', 'hydro_consumption',
@@ -109,13 +109,13 @@ def select_key_columns(df):
     
     per_capita = [col for col in df.columns if 'per_capita' in col]
     
-   
+
     engineered = [col for col in df.columns if col.startswith(('renewable_', 'fossil_', 'coal_', 'nuclear_'))]
     
     cols_to_keep = list(set(keep + primary + sources + electricity + per_capita + engineered))
     cols_to_keep = [col for col in cols_to_keep if col in df.columns]
     
-  
+
     if 'country' not in cols_to_keep:
         cols_to_keep.insert(0, 'country')
     if 'year' not in cols_to_keep:
@@ -136,7 +136,7 @@ def fill_missing(df):
         print("no missing values to fill")
         return df
     
-  
+
     df = df.sort_values(['country', 'year']).reset_index(drop=True)
     df = df.groupby('country', group_keys=False).apply(lambda x: x.ffill()).reset_index(drop=True)
     df = df.groupby('country', group_keys=False).apply(lambda x: x.bfill()).reset_index(drop=True)
