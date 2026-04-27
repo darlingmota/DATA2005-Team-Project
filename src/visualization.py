@@ -79,3 +79,19 @@ plt.xscale('log'); plt.yscale('log'); plt.savefig('5_regression.png'); plt.close
         g = sns.jointplot(data=joint_data, x='gdp', y='renewables_share_energy', kind='hex', color='#1abc9c')
         g.ax_joint.set_xscale('log')
         plt.savefig('8_jointplot.png'); plt.close()
+
+    # 9. Regional FacetGrid (Small Multiples)
+    g = sns.FacetGrid(region_df[region_df['year'] >= 2000], col="country", col_wrap=3, height=3)
+    g.map(plt.plot, "year", "energy_per_capita", color="purple", marker=".")
+    plt.savefig('9_facetgrid.png'); plt.close()
+
+    # 10. PairPlot Matrix
+    cols = ['renewables_share_elec', 'solar_share_elec', 'wind_share_elec', 'nuclear_share_elec']
+    pair_data = country_df[country_df['year'] == latest_valid_year][cols].dropna()
+    sns.pairplot(pair_data, diag_kind='kde', corner=True, plot_kws={'alpha':0.4})
+    plt.savefig('10_pairplot_matrix.png'); plt.close()
+
+    print("\n--- DONE! 10 Professional Visualizations Generated ---")
+
+if __name__ == "__main__":
+    run_master_pipeline()
