@@ -59,21 +59,21 @@ def run_master_pipeline():
     sns.regplot(data=scat, x='gdp', y='low_carbon_electricity', scatter_kws={'alpha':0.3}, line_kws={'color':'red'})
 plt.xscale('log'); plt.yscale('log'); plt.savefig('5_regression.png'); plt.close()
 
-    # 6. Regional Violin Plot
+   
     plt.figure(figsize=(10, 5))
     sns.violinplot(data=region_df[region_df['year'] > 2015], x='country', y='renewables_share_elec', palette='pastel')
     plt.savefig('6_violin.png'); plt.close()
 
-    # --- THE 4 "SHOW-OFF" GRAPHS (The Advanced Analysis) ---
+    
     print("Generating Show-Off Graphs 7-10...")
 
-    # 7. Distribution Shift (KDE)
+   
     plt.figure(figsize=(10, 5))
     for yr in [2000, 2021]:
         sns.kdeplot(df[df['year'] == yr]['carbon_intensity_elec'].dropna(), fill=True, label=f'Year {yr}')
     plt.title('Statistical Shift in Carbon Intensity'); plt.legend(); plt.savefig('7_carbon_kde.png'); plt.close()
 
-    # 8. JointPlot (Robust Version)
+   
     joint_data = country_df[(country_df['year'] == latest_valid_year) & (country_df['gdp'] > 0) & (country_df['renewables_share_energy'] > 0)].dropna(subset=['gdp', 'renewables_share_energy'])
     if not joint_data.empty:
         g = sns.jointplot(data=joint_data, x='gdp', y='renewables_share_energy', kind='hex', color='#1abc9c')
