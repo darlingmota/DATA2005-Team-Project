@@ -36,7 +36,7 @@ DATA2005-TEAM-PROJECT/
 | | |-- .gitkeep
 | | |__ oid-energy-data.csv
 
-|__ output/
+|__ outputs/
 | |__ figures/
 | | |__ .gitkeep
 | |__ reports/
@@ -62,4 +62,29 @@ Requirements
 Installation
 
 ## Data Acquisition
-Kaggle 
+Kaggle
+1. Go to https://www.kaggle.com/datasets/pralabhpoudel/world-energy-consumption
+2. Download World Energy Consumption.csv
+3. Place it in data/raw/ and rename to owid-energy-data.csv 
+
+## Usage
+
+## Pipeline Overview
+
+| Stage              | Module            | Function(s)            | What it does                           |  Rubric criterion     |
+|--------------------|-------------------|------------------------|----------------------------------------|-----------------------|  
+| 1. Load            | data_loading.py   | load_raw_data          | Reads raw CSV with error handling      |Data Loading           |
+| 2. Validate        | camelCase    | `newCustomerId`        | `newCustomerID`       |                       |   
+| "new customer ID"  | camelCase    | `newCustomerId`        | `newCustomerID`       |                       |
+| "new customer ID"  | camelCase    | `newCustomerId`        | `newCustomerID`       |                       |
+| "new customer ID"  | camelCase    | `newCustomerId`        | `newCustomerID`       |                       |
+| "new customer ID"  | camelCase    | `newCustomerId`        | `newCustomerID`       |                       |
+| "new customer ID"  | camelCase    | `newCustomerId`        | `newCustomerID`       |                       |
+| "new customer ID"  | camelCase    | `newCustomerId`        | `newCustomerID`       |                       |
+| "new customer ID"  | camelCase    | `newCustomerId`        | `newCustomerID`       |                       |
+| "new customer ID"  | camelCase    | `newCustomerId`        | `newCustomerID`       |                       |
+| "new customer ID"  | camelCase    | `newCustomerId`        | `newCustomerID`       |                       |
+| "new customer ID"  | camelCase    | `newCustomerId`        | `newCustomerID`       |                       |
+
+
+## Academic Integrity
