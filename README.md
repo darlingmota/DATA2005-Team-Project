@@ -60,6 +60,26 @@ Requirements
 - Python >= 3.12
 
 Installation
+# Create and activate a virtual environment
+
+python -m venv .venv
+
+source .venv/bin/activate         # macOS / Linux
+
+.venv\Scripts\activate            # Windows
+
+# Install dependencies
+
+pip install -r requirements.txt
+
+requirements.txt
+numpy >= 1.26
+pandas >= 2.1
+matplotlib >= 3.8
+seaborn >= 0.13
+requests >= 2.31
+jupyter >= 1.0
+
 
 ## Data Acquisition
 Kaggle
@@ -68,23 +88,29 @@ Kaggle
 3. Place it in data/raw/ and rename to owid-energy-data.csv 
 
 ## Usage
+# Run the full data pipeline
+From the project root, run the main pipeline to load, validate, clean, and export the dataset:
+
+python src/main.py
+
+This reads data/raw/owid-energy-data.csv and writes data/processed/owid-energy-clean.csv.
+
+# Run the analysis module
+python src/analysis.py
+
+Computes summary statistics, anomaly detection, top-N consumers, and aggregations on the cleaned dataset, printing key results to the console.
+
+
 
 ## Pipeline Overview
+The project is organised as four cooperating modules in src/:
 
-| Stage              | Module            | Function(s)            | What it does                           |  Rubric criterion     |
-|--------------------|-------------------|------------------------|----------------------------------------|-----------------------|  
-| 1. Load            | data_loading.py   | load_raw_data          | Reads raw CSV with error handling      |Data Loading           |
-| 2. Validate        | camelCase    | `newCustomerId`        | `newCustomerID`       |                       |   
-| "new customer ID"  | camelCase    | `newCustomerId`        | `newCustomerID`       |                       |
-| "new customer ID"  | camelCase    | `newCustomerId`        | `newCustomerID`       |                       |
-| "new customer ID"  | camelCase    | `newCustomerId`        | `newCustomerID`       |                       |
-| "new customer ID"  | camelCase    | `newCustomerId`        | `newCustomerID`       |                       |
-| "new customer ID"  | camelCase    | `newCustomerId`        | `newCustomerID`       |                       |
-| "new customer ID"  | camelCase    | `newCustomerId`        | `newCustomerID`       |                       |
-| "new customer ID"  | camelCase    | `newCustomerId`        | `newCustomerID`       |                       |
-| "new customer ID"  | camelCase    | `newCustomerId`        | `newCustomerID`       |                       |
-| "new customer ID"  | camelCase    | `newCustomerId`        | `newCustomerID`       |                       |
-| "new customer ID"  | camelCase    | `newCustomerId`        | `newCustomerID`       |                       |
+1. Data Loading (data_loading.py) — reads the raw CSV, runs structural validation (row/column counts, missing-value summary, duplicate detection, country and year coverage), and reports a high-level overview of the dataset.
 
+2. Preprocessing (preprocessing.py) — drops columns with more than 70% missing values, filters to the modern era (year ≥ 2000), removes exact duplicates, removes rows missing the key energy columns, engineers four derived features (renewable_elec_share, coal_elec_share, nuclear_elec_share, fossil_renewable_ratio), selects a focused subset of relevant columns, and forward/backward fills remaining gaps within each country.
+
+3. Analysis (analysis.py) — computes summary statistics, yearly/decadal/country aggregations, per-capita normalisation, z-score standardisation, energy-mix shares, peak-year detection, top-N consumers, anomaly detection (z-score > 3), and a correlation matrix across the main indicators. Most aggregations use pandas groupby with vectorised NumPy operations underneath.
+
+4. Visualization (visualization.py) — produces a curated set of five figures, each covering a distinct analytical angle and using a different chart type: the global fossil-vs-renewables transition (stackplot), the energy mix of the top-five consumer countries (grouped bar), the regional distribution of renewables share in electricity (violin), the statistical shift in carbon intensity between 2000 and 2021 (KDE), and the divergent energy-per-capita trajectories of the world's regions (faceted line). Built with matplotlib and seaborn, reading from the raw OWID CSV so that pre-2000 data remains available for historical context.
 
 ## Academic Integrity
