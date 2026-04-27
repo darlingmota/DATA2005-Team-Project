@@ -40,3 +40,20 @@ def run_master_pipeline():
     plt.figure(figsize=(8, 6))
     sns.heatmap(world_df[['gdp', 'population', 'fossil_fuel_consumption', 'renewables_consumption']].corr(), annot=True, cmap='mako')
     plt.savefig('2_heatmap.png'); plt.close()
+
+   
+    plt.figure(figsize=(10, 5))
+    sns.lineplot(data=world_df[world_df['year'] >= 2000], x='year', y='solar_consumption', label='Solar')
+    sns.lineplot(data=world_df[world_df['year'] >= 2000], x='year', y='wind_consumption', label='Wind')
+    plt.savefig('3_solar_wind.png'); plt.close()
+
+  
+    top_5 = country_df[country_df['year'] == latest_valid_year].nlargest(5, 'primary_energy_consumption')
+    mix = top_5.melt(id_vars='country', value_vars=['coal_consumption', 'gas_consumption', 'renewables_consumption'])
+    plt.figure(figsize=(10, 5))
+    sns.barplot(data=mix, x='country', y='value', hue='variable'); plt.savefig('4_top5.png'); plt.close()
+
+    
+    scat = country_df[(country_df['year'] == latest_valid_year) & (country_df['gdp'] > 0) & (country_df['low_carbon_electricity'] > 0)]
+    plt.figure(figsize=(8, 5))
+    sns.regplot(data=scat, x='gdp', y='low_carbon_electricity', scatter_kws={'alpha':0.3}, line_kws={'color':'red'})
