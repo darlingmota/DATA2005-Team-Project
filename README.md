@@ -14,7 +14,7 @@
 
 ## Project Description
 
-This project processes the Our World in Data (OWID) World Energy Consumpiton dataset to analyse how the global energy mix has shifted between fossil fuels and low carbon sources. The pipeline loads the raw country level annual data, drops sparse indicators, filters to the modern year(2000+), engineers four energy mix share features, and produces a cleaned dataset ready for statistical analysis and visualization. Final outputs are exported in CSV and JSON formats. 
+This project analyses how the global energy mix has changed between fossil fuels and low-carbon sources by processing the Our World in Data (OWID) World Energy Consumption dataset. The pipeline creates a cleaned dataset that is ready for statistical analysis and visualisation after loading the raw country-level annual data, removing sparse indicators, filtering to the most recent years (2000+), and engineering four energy mix share features. The final results are exported in JSON and CSV formats. 
 
 ## Dataset
 
@@ -29,13 +29,13 @@ The raw dataset contains a wide range of energy indicators including total consu
 
 The project is organised as four cooperating modules in `src/`:
 
-**1. Data Loading (`data_loading.py`)** — reads the raw CSV, runs structural validation (row/column counts, missing-value summary, duplicate detection, country and year coverage), and reports a high-level overview of the dataset.
+**1. Data Loading (`data_loading.py`)** — Reads the raw CSV, runs structural validation (row/column counts, missing-value summary, duplicate detection, country and year coverage), and reports a high-level overview of the dataset.
 
-**2. Preprocessing (`preprocessing.py`)** — drops columns with more than 70% missing values, filters to the modern era (year ≥ 2000), removes exact duplicates, removes rows missing the key energy columns, engineers four derived features (`renewable_elec_share`, `coal_elec_share`, `nuclear_elec_share`, `fossil_renewable_ratio`), selects a focused subset of relevant columns, and forward/backward fills remaining gaps within each country.
+**2. Preprocessing (`preprocessing.py`)** — Drops columns with more than 70% missing values, filters to the modern era (year ≥ 2000), removes exact duplicates, removes rows missing the key energy columns, engineers four derived features (`renewable_elec_share`, `coal_elec_share`, `nuclear_elec_share`, `fossil_renewable_ratio`), selects a focused subset of relevant columns, and forward/backward fills remaining gaps within each country.
 
-**3. Analysis (`analysis.py`)** — computes summary statistics, yearly/decadal/country aggregations, per-capita normalisation, z-score standardisation, energy-mix shares, peak-year detection, top-N consumers, anomaly detection (z-score > 3), and a correlation matrix across the main indicators. Most aggregations use pandas `groupby` with vectorised NumPy operations underneath.
+**3. Analysis (`analysis.py`)** — Computes summary statistics, yearly/decadal/country aggregations, per-capita normalisation, z-score standardisation, energy-mix shares, peak-year detection, top-N consumers, anomaly detection (z-score > 3), and a correlation matrix across the main indicators. Most aggregations use pandas `groupby` with vectorised NumPy operations underneath.
 
-**4. Visualization (`visualization.py`)** — produces a curated set of five figures, each covering a distinct analytical angle and using a different chart type: the global fossil-vs-renewables transition (stackplot), the energy mix of the top-five consumer countries (grouped bar), the regional distribution of renewables share in electricity (violin), the statistical shift in carbon intensity between 2000 and 2021 (KDE), and the divergent energy-per-capita trajectories of the world's regions (faceted line). Built with matplotlib and seaborn, reading from the raw OWID CSV so that pre-2000 data remains available for historical context.
+**4. Visualization (`visualization.py`)** — Creates a well chosen collection of five figures, each employing a different chart format and presenting a different analytical aspect from the dataset: the global fossil-vs-renewables transition (stackplot), the energy mix of the top-five consumer countries (grouped bar), the regional distribution of renewables share in electricity (violin), the statistical shift in carbon intensity between 2000 and 2021 (KDE), and The varied energy-per-capita patterns of the world's regions (faceted line). Built with matplotlib and seaborn, reading from the raw OWID CSV so that pre-2000 data remains available for historical context.
 
 
 ## Repository Structure 
@@ -78,7 +78,7 @@ DATA2005-TEAM-PROJECT/
 - numpy
 - matplotlib
 - seaborn
-- openpyxl (only if reading `.xlsx` inputs)
+- openpyxl
 
 ### Installation
 
