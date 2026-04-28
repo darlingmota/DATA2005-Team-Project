@@ -8,9 +8,9 @@
 | Name | Role | GitHub |
 |------|------|--------|
 | [Darling Mota] | Data Engineer | [@darlingmota] (https://github.com/darlingmota) |
-| [Titas Utrya] | Data Analyst | [@titas3012](https://github.com/Titas3012) |
-| [Prosper Umeh] | Visualization Lead | [@pruber](https://github.com/Pruber) |
-| [Nischal Rana] | Documentation Lead | [@NischalRana29](https://github.com/NischalRana29) |
+| [Titas Utrya] | Data Analyst | [@titas3012] (https://github.com/Titas3012) |
+| [Prosper Umeh] | Visualization Lead | [@pruber] (https://github.com/Pruber) |
+| [Nischal Rana] | Documentation Lead | [@NischalRana29] (https://github.com/NischalRana29) |
 
 ## Project Description
 
