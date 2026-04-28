@@ -56,29 +56,25 @@ DATA2005-TEAM-PROJECT/
 
 ## Setup
 
-Requirements
+# Requirements
 - Python >= 3.12
-
 Installation
-# Create and activate a virtual environment
 
-python -m venv .venv
+Clone the repository and install dependencies:
 
-source .venv/bin/activate         # macOS / Linux
+git clone https://github.com/<your-org>/DATA2005-TEAM-PROJECT.git
 
-.venv\Scripts\activate            # Windows
+cd DATA2005-TEAM-PROJECT
 
-# Install dependencies
+python -m venv venv
 
-pip install -r requirements.txt
+source venv/bin/activate          # macOS / Linux
 
-requirements.txt
-numpy >= 1.26
-pandas >= 2.1
-matplotlib >= 3.8
-seaborn >= 0.13
-requests >= 2.31
-jupyter >= 1.0
+venv\Scripts\activate             # Windows
+
+pip install pandas numpy matplotlib seaborn openpyxl
+Data Acquisition
+Download owid-energy-data.csv from the Kaggle dataset page and place it in data/raw/.
 
 
 ## Data Acquisition
@@ -88,6 +84,8 @@ Kaggle
 3. Place it in data/raw/ and rename to owid-energy-data.csv 
 
 ## Usage
+#from the project roof, run the main pipeline to f
+
 # Run the full data pipeline
 From the project root, run the main pipeline to load, validate, clean, and export the dataset:
 
@@ -111,6 +109,6 @@ The project is organised as four cooperating modules in src/:
 
 3. Analysis (analysis.py) — computes summary statistics, yearly/decadal/country aggregations, per-capita normalisation, z-score standardisation, energy-mix shares, peak-year detection, top-N consumers, anomaly detection (z-score > 3), and a correlation matrix across the main indicators. Most aggregations use pandas groupby with vectorised NumPy operations underneath.
 
-4. Visualization (visualization.py) — produces a curated set of five figures, each covering a distinct analytical angle and using a different chart type: the global fossil-vs-renewables transition (stackplot), the energy mix of the top-five consumer countries (grouped bar), the regional distribution of renewables share in electricity (violin), the statistical shift in carbon intensity between 2000 and 2021 (KDE), and the divergent energy-per-capita trajectories of the world's regions (faceted line). Built with matplotlib and seaborn, reading from the raw OWID CSV so that pre-2000 data remains available for historical context.
+4. Visualization (visualization.py) — produces a curated set of five figures, each covering a distinct analytical angle and using a different chart type: the global fossil-vs-renewables transition (stackplot), the energy mix of the top-five consumer countries (grouped bar), the regional distribution of renewables share in electricity (violin), the statistical shift in carbon intensity between 2000 and 2021 (KDE), and the divergent energy-per-capita trajectories of the world's regions (faceted line). Built with matplotlib and seaborn, reading from the raw OWID CSV so that pre-2000 data remains available for historical context
 
 ## Academic Integrity
