@@ -51,9 +51,32 @@ DATA2005-TEAM-PROJECT/
 
 |__ LINCENSE
 
-|__ README.md   <-- this file
+|__ README.md  
 
 ## Setup
+Requirements
+Python ≥ 3.12
+pandas
+numpy
+matplotlib
+seaborn
+openpyxl (only if reading .xlsx inputs)
+Installation
+Clone the repository and install dependencies:
+
+git clone https://github.com/darlingmota/DATA2005-Team-Project.git
+
+cd DATA2005-TEAM-PROJECT
+
+python -m venv venv
+
+source venv/bin/activate          # macOS / Linux
+
+venv\Scripts\activate             # Windows
+
+pip install pandas numpy matplotlib seaborn openpyxl
+Data Acquisition
+Download owid-energy-data.csv from the Kaggle dataset page and place it in data/raw/.
 
 # Requirements
 - Python >= 3.12
@@ -61,7 +84,7 @@ Installation
 
 Clone the repository and install dependencies:
 
-git clone https://github.com/<your-org>/DATA2005-TEAM-PROJECT.git
+git clone https://github.com/darlingmota/DATA2005-Team-Project.git
 
 cd DATA2005-TEAM-PROJECT
 
@@ -98,7 +121,6 @@ python src/analysis.py
 Computes summary statistics, anomaly detection, top-N consumers, and aggregations on the cleaned dataset, printing key results to the console.
 
 
-
 ## Pipeline Overview
 The project is organised as four cooperating modules in src/:
 
@@ -110,6 +132,20 @@ The project is organised as four cooperating modules in src/:
 
 4. Visualization (visualization.py) — produces a curated set of five figures, each covering a distinct analytical angle and using a different chart type: the global fossil-vs-renewables transition (stackplot), the energy mix of the top-five consumer countries (grouped bar), the regional distribution of renewables share in electricity (violin), the statistical shift in carbon intensity between 2000 and 2021 (KDE), and the divergent energy-per-capita trajectories of the world's regions (faceted line). Built with matplotlib and seaborn, reading from the raw OWID CSV so that pre-2000 data remains available for historical context
 
+## Output files 
 
-## Lcense
+data/processed/owid-energy-clean.csv: Cleaned dataset, post-2000, with engineered features
+
+outputs/figures/transition.png: Global fossil vs renewables consumption over time
+
+outputs/figures/top5_countries.png: Energy mix of the top-5 consumer countries
+
+outputs/figures/regional_violin.png: Regional distribution of renewables share in electricity
+
+outputs/figures/carbon_intensity_kde.png: Carbon-intensity density: 2000 vs 2021
+
+outputs/figures/regional_per_capita_facets.png: Energy per capita by region, faceted over time
+
+
+## License
 This project is released under the terms of the LICENSE file in the project root.
