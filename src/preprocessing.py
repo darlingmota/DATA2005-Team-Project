@@ -67,7 +67,7 @@ def handle_missing(df):
 
 def engineer_features(df):
     
-    #first feature is renewable electricicty as percentage of total generation
+    
    
     if 'renewables_electricity' in df.columns and 'electricity_generation' in df.columns:
         df['renewable_elec_share'] = (df['renewables_electricity'] / df['electricity_generation'] * 100).round(2)
@@ -81,7 +81,7 @@ def engineer_features(df):
     if 'coal_electricity' in df.columns and 'electricity_generation' in df.columns:
         df['coal_elec_share'] = (df['coal_electricity'] / df['electricity_generation'] * 100).round(2)
     
-   #last feature is nuclear's share of electricity generation
+   
     if 'nuclear_electricity' in df.columns and 'electricity_generation' in df.columns:
         df['nuclear_elec_share'] = (df['nuclear_electricity'] / df['electricity_generation'] * 100).round(2)
     
@@ -97,7 +97,7 @@ def select_key_columns(df):
     #primary key metrics
     primary = ['electricity_generation', 'primary_energy_consumption']
     
-   #energy consumed by source
+   
     sources = [
         'fossil_fuel_consumption', 'coal_consumption', 'gas_consumption', 'oil_consumption',
         'renewables_consumption', 'solar_consumption', 'wind_consumption', 'hydro_consumption',
@@ -114,14 +114,14 @@ def select_key_columns(df):
     # per capita version of metricles 
     per_capita = [col for col in df.columns if 'per_capita' in col]
     
-   # engineered features created
+   
     engineered = [col for col in df.columns if col.startswith(('renewable_', 'fossil_', 'coal_', 'nuclear_'))]
     # combine all lists
     cols_to_keep = list(set(keep + primary + sources + electricity + per_capita + engineered))
     #only keep columns that actually exist
     cols_to_keep = [col for col in cols_to_keep if col in df.columns]
     
-  # ensure country and year are always first
+  
     if 'country' not in cols_to_keep:
         cols_to_keep.insert(0, 'country')
     if 'year' not in cols_to_keep:
@@ -143,7 +143,7 @@ def fill_missing(df):
         print("no missing values to fill")
         return df
     
-  #sort by country and year to enable meaningful forward fill
+  
     df = df.sort_values(['country', 'year']).reset_index(drop=True)
 
     # forward fill within each country using previous years values
