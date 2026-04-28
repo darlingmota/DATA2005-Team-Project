@@ -23,7 +23,6 @@ This project processes the Our World in Data (OWID) World Energy Consumpiton dat
 - **Size:** [~20,000+]
 - **Format:** CSV/JSON
 
-## Project Structure 2026
 
 ## Repository Structure 
 DATA2005-TEAM-PROJECT/
@@ -111,4 +110,6 @@ The project is organised as four cooperating modules in src/:
 
 4. Visualization (visualization.py) — produces a curated set of five figures, each covering a distinct analytical angle and using a different chart type: the global fossil-vs-renewables transition (stackplot), the energy mix of the top-five consumer countries (grouped bar), the regional distribution of renewables share in electricity (violin), the statistical shift in carbon intensity between 2000 and 2021 (KDE), and the divergent energy-per-capita trajectories of the world's regions (faceted line). Built with matplotlib and seaborn, reading from the raw OWID CSV so that pre-2000 data remains available for historical context
 
-## Academic Integrity
+
+## Lcense
+This project is released under the terms of the LICENSE file in the project root.
