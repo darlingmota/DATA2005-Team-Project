@@ -80,18 +80,15 @@ DATA2005-TEAM-PROJECT/
 ### Installation
 
 Clone the repository and install dependencies:
-
+```bash
 git clone https://github.com/darlingmota/DATA2005-Team-Project.git
-
 cd DATA2005-TEAM-PROJECT
-
 python -m venv venv
-
 source venv/bin/activate          # macOS / Linux
-
 venv\Scripts\activate             # Windows
-
 pip install pandas numpy matplotlib seaborn openpyxl
+```
+
 
 ### Data Acquisition
 
@@ -126,19 +123,48 @@ Produces a set of figures saved to the working directory as PNG files, including
 
 data/processed/owid-energy-clean.csv: Cleaned dataset, post-2000, with engineered features
 
-outputs/figures/transition.png: Global fossil vs renewables consumption over time
+outputs/figures/1_transition.png: Global fossil vs renewables consumption over time
 
-outputs/figures/top5_countries.png: Energy mix of the top-5 consumer countries
+outputs/figures/4_top5.png: Energy mix of the top-5 consumer countries
 
-outputs/figures/regional_violin.png: Regional distribution of renewables share in electricity
+outputs/figures/6_violin.png: Regional distribution of renewables share in electricity
 
-outputs/figures/carbon_intensity_kde.png: Carbon-intensity density: 2000 vs 2021
+outputs/figures/7_carbon_kde.png: Carbon-intensity density: 2000 vs 2021
 
-outputs/figures/regional_per_capita_facets.png: Energy per capita by region, faceted over time
+outputs/figures/9_facetgrid.png: Energy per capita by region, faceted over time
+
+
+## Sample Outputs
+
+A selection of figures produced by `visualization.py`. The full set lives in `outputs/figures/`.
+
+### Global Energy Transition
+
+The headline finding: global fossil-fuel consumption has continued to grow alongside renewables. Renewables are catching up but absolute fossil consumption has not yet declined.
+
+<p align="center">
+    <img src="outputs/figures/1_transition.png" alt="Global Energy Transition stackplot" width="700"/>
+</p>
+
+### Renewables Share of Electricity by Region
+
+Distributions of renewables share across the post-2015 period. South America stands out at roughly 70% renewables, while most other regions cluster between 20% and 35%.
+
+<p align="center">
+    <img src="outputs/figures/6_violin.png" alt="Regional renewables share violin plot" width="700"/>
+</p>
+
+### Energy Mix of Top-5 Consumers
+
+The five largest energy consumers and how their mix differs. China is heavily coal-dependent, the US leans on gas, and renewables remain a small share for all five.
+
+<p align="center">
+    <img src="outputs/figures/4_top5.png" alt="Top 5 consumer countries energy mix" width="700"/>
+</p>
 
 
 ## Engineered Features
- 
+
 renewable_elec_share: Renewables as % of total electricity generation
 
 coal_elec_share: Coal as % of total electricity generation
