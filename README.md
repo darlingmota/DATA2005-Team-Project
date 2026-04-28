@@ -7,10 +7,10 @@
 
 | Name | Role | GitHub |
 |------|------|--------|
-| [Darling Mota] | Data Engineer | [@darlingmota] |
-| [Titas Utrya] | Data Analyst | [@titas3012] |
-| [Prosper Umeh] | Visualization Lead | [@pruber] |
-| [Nischal Rana] | Documentation Lead | [@NischalRana29] |
+| [Darling Mota] | Data Engineer | [@darlingmota] (https://github.com/darlingmota) |
+| [Titas Utrya] | Data Analyst | [@titas3012](https://github.com/Titas3012) |
+| [Prosper Umeh] | Visualization Lead | [@pruber](https://github.com/Pruber) |
+| [Nischal Rana] | Documentation Lead | [@NischalRana29](https://github.com/NischalRana29) |
 
 ## Project Description
 
@@ -19,53 +19,56 @@ This project processes the Our World in Data (OWID) World Energy Consumpiton dat
 ## Dataset
 
 - **Name:** [World Energy Consumption]
-- **Source:** [\[[Source URL](https://www.kaggle.com/datasets/pralabhpoudel/world-energy-consumption)\]](https://www.kaggle.com/datasets/pralabhpoudel/world-energy-consumption)
+- **Source:** [Kaggle] [\[[Source URL](https://www.kaggle.com/datasets/pralabhpoudel/world-energy-consumption)\]](https://www.kaggle.com/datasets/pralabhpoudel/world-energy-consumption)
 - **Size:** [~20,000+]
-- **Format:** CSV/JSON
+- **Format:** CSV
 
+The raw dataset contains a wide range of energy indicators including total consumption, source-specific consumption (coal, gas, oil, renewables, nuclear, etc.), electricity generation by source, per-capita measures, and economic context (GDP, population). Many indicators are sparsely populated for earlier years, which motivates the cleaning steps in our pipeline.
 
 ## Pipeline Overview
 
-The project is organised as four cooperating modules in src/:
+The project is organised as four cooperating modules in `src/`:
 
-1. Data Loading (data_loading.py) — reads the raw CSV, runs structural validation (row/column counts, missing-value summary, duplicate detection, country and year coverage), and reports a high-level overview of the dataset.
+**1. Data Loading (`data_loading.py`)** — reads the raw CSV, runs structural validation (row/column counts, missing-value summary, duplicate detection, country and year coverage), and reports a high-level overview of the dataset.
 
-2. Preprocessing (preprocessing.py) — drops columns with more than 70% missing values, filters to the modern era (year ≥ 2000), removes exact duplicates, removes rows missing the key energy columns, engineers four derived features (renewable_elec_share, coal_elec_share, nuclear_elec_share, fossil_renewable_ratio), selects a focused subset of relevant columns, and forward/backward fills remaining gaps within each country.
+**2. Preprocessing (`preprocessing.py`)** — drops columns with more than 70% missing values, filters to the modern era (year ≥ 2000), removes exact duplicates, removes rows missing the key energy columns, engineers four derived features (`renewable_elec_share`, `coal_elec_share`, `nuclear_elec_share`, `fossil_renewable_ratio`), selects a focused subset of relevant columns, and forward/backward fills remaining gaps within each country.
 
-3. Analysis (analysis.py) — computes summary statistics, yearly/decadal/country aggregations, per-capita normalisation, z-score standardisation, energy-mix shares, peak-year detection, top-N consumers, anomaly detection (z-score > 3), and a correlation matrix across the main indicators. Most aggregations use pandas groupby with vectorised NumPy operations underneath.
+**3. Analysis (`analysis.py`)** — computes summary statistics, yearly/decadal/country aggregations, per-capita normalisation, z-score standardisation, energy-mix shares, peak-year detection, top-N consumers, anomaly detection (z-score > 3), and a correlation matrix across the main indicators. Most aggregations use pandas `groupby` with vectorised NumPy operations underneath.
 
-4. Visualization (visualization.py) — produces a curated set of five figures, each covering a distinct analytical angle and using a different chart type: the global fossil-vs-renewables transition (stackplot), the energy mix of the top-five consumer countries (grouped bar), the regional distribution of renewables share in electricity (violin), the statistical shift in carbon intensity between 2000 and 2021 (KDE), and the divergent energy-per-capita trajectories of the world's regions (faceted line). Built with matplotlib and seaborn, reading from the raw OWID CSV so that pre-2000 data remains available for historical context.
+**4. Visualization (`visualization.py`)** — produces a curated set of five figures, each covering a distinct analytical angle and using a different chart type: the global fossil-vs-renewables transition (stackplot), the energy mix of the top-five consumer countries (grouped bar), the regional distribution of renewables share in electricity (violin), the statistical shift in carbon intensity between 2000 and 2021 (KDE), and the divergent energy-per-capita trajectories of the world's regions (faceted line). Built with matplotlib and seaborn, reading from the raw OWID CSV so that pre-2000 data remains available for historical context.
 
 
 ## Repository Structure 
 
+```
 DATA2005-TEAM-PROJECT/
-
-|__ data/
-| |__processed/
-| | |-- .gitkeep
-| | |__ owid-energy-clean.csv
-| |__raw/
-| | |-- .gitkeep
-| | |__ oid-energy-data.csv
-
-|__ outputs/
-| |__ figures/
-| | |__ .gitkeep
-| |__ reports/
-| | |__ .gitkeep
-
-|__ src
-| |-- __init__.py
-| |-- analysis.py
-| |-- data_loading.py
-| |-- main.py
-| |-- preprocessing.py
-| |__ visualization.py
-
-|__ LINCENSE
-
-|__ README.md  
+├── data/
+│   ├── raw/
+│   │   ├── .gitkeep
+│   │   └── owid-energy-data.csv                    
+│   └── processed/
+│       ├── .gitkeep
+│       └── owid-energy-clean.csv                   
+├── outputs/
+│   ├── figures/                                    
+│   │   ├── .gitkeep
+│   │   ├── 1_transition.png
+│   │   ├── 4_top5.png
+│   │   ├── 6_violin.png
+│   │   ├── 7_carbon_kde.png
+│   │   └── 9_facetgrid.png
+│   └── reports/                                   
+│       └── .gitkeep
+├── src/
+│   ├── __init__.py
+│   ├── data_loading.py                           
+│   ├── preprocessing.py                           
+│   ├── analysis.py                                 
+│   ├── visualization.py                            
+│   └── main.py                                     
+├── LICENSE
+└── README.md
+``` 
 
 ## Setup
 ### Requirements
@@ -75,7 +78,7 @@ DATA2005-TEAM-PROJECT/
 - numpy
 - matplotlib
 - seaborn
-- openpyxl
+- openpyxl (only if reading `.xlsx` inputs)
 
 ### Installation
 
@@ -122,22 +125,18 @@ Computes summary statistics, anomaly detection, top-N consumers, and aggregation
 python src/visualization.py
 ```
 
-Produces a set of figures saved to the working directory as PNG files, including the global energy transition, regional renewables shares, GDP vs low-carbon electricity, and the carbon-intensity distribution shift.
+Produces a set of figures saved to `outputs/figures/` as PNG files, including the global energy transition, the energy mix of the top-five consumers, the regional distribution of renewables, the carbon-intensity distribution shift, and energy per capita by region.
 
 
 ## Output files 
-
-data/processed/owid-energy-clean.csv: Cleaned dataset, post-2000, with engineered features
-
-outputs/figures/1_transition.png: Global fossil vs renewables consumption over time
-
-outputs/figures/4_top5.png: Energy mix of the top-5 consumer countries
-
-outputs/figures/6_violin.png: Regional distribution of renewables share in electricity
-
-outputs/figures/7_carbon_kde.png: Carbon-intensity density: 2000 vs 2021
-
-outputs/figures/9_facetgrid.png: Energy per capita by region, faceted over time
+| File | Description |
+|------|-------------|
+| `data/processed/owid-energy-clean.csv` | Cleaned dataset, post-2000, with engineered features |
+| `outputs/figures/1_transition.png` | Global fossil vs renewables consumption over time |
+| `outputs/figures/4_top5.png` | Energy mix of the top-5 consumer countries |
+| `outputs/figures/6_violin.png` | Regional distribution of renewables share in electricity |
+| `outputs/figures/7_carbon_kde.png` | Carbon-intensity density: 2000 vs 2021 |
+| `outputs/figures/9_facetgrid.png` | Energy per capita by region, faceted over time |
 
 
 ## Sample Outputs
@@ -171,15 +170,14 @@ The five largest energy consumers and how their mix differs. China is heavily co
 
 ## Engineered Features
 
-renewable_elec_share: Renewables as % of total electricity generation
-
-coal_elec_share: Coal as % of total electricity generation
-
-nuclear_elec_share: Nuclear as % of total electricity generation
-
-fossil_renewable_ratio: Fossil-fuel consumption ÷ renewables consumption
+| Feature | Definition |
+|---------|------------|
+| `renewable_elec_share` | Renewables as % of total electricity generation |
+| `coal_elec_share` | Coal as % of total electricity generation |
+| `nuclear_elec_share` | Nuclear as % of total electricity generation |
+| `fossil_renewable_ratio` | Fossil-fuel consumption ÷ renewables consumption |
 
 These features make it easier to compare countries on energy-mix composition rather than absolute consumption, which is dominated by population and GDP.
 
 ## License
-This project is released under the terms of the LICENSE file in the project root.
+This project is released under the terms of the `LICENSE` file in the project root.
