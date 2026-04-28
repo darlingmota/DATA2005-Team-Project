@@ -11,19 +11,20 @@ def summarise(df_raw, df_clean):
     
     print("\nSummary")
     
+    #row reduction
     
     print(f"\before: {len(df_raw):,} rows × {len(df_raw.columns)} columns")
     print(f"after:  {len(df_clean):,} rows × {len(df_clean.columns)} columns")
     print(f"\rows removed: {len(df_raw) - len(df_clean):,}")
     print(f"Columns reduced: {len(df_raw.columns)} → {len(df_clean.columns)}")
     
-    print("\key features:")
+    print("\nkey features:")#feature explanantion
     print("  Core: country, year, population, gdp")
     print("  Energy sources: fossil, coal, gas, oil, renewables, nuclear")
     print("  Electricity: by source (coal, gas, solar, wind, nuclear, etc.)")
     print("  Engineered: renewable_elec_share, coal_elec_share, nuclear_elec_share")
     
-    
+    #data coverage 
     countries = df_clean['country'].nunique()
     years_min, years_max = df_clean['year'].min(), df_clean['year'].max()
     print(f"\nCOVERAGE:")
@@ -35,9 +36,9 @@ def summarise(df_raw, df_clean):
 
 def export_data(df, output_file):
     """Save cleaned data to CSV."""
-    Path(output_file).parent.mkdir(parents=True, exist_ok=True)
-    df.to_csv(output_file, index=False)
-    size_mb = Path(output_file).stat().st_size / (1024*1024)
+    Path(output_file).parent.mkdir(parents=True, exist_ok=True)#create output directory and all parent directories if they dont exist
+    df.to_csv(output_file, index=False) # save to csv
+    size_mb = Path(output_file).stat().st_size / (1024*1024)# report file size
     print(f"exported to: {output_file}")
     print(f"size: {size_mb:.1f} MB")
 
@@ -49,42 +50,42 @@ def main():
     print("\nour world in data energy pipeline")
     
     
-
+  
     raw_file = "data/raw/owid-energy-data.csv"
     clean_file = "data/processed/owid-energy-clean.csv"
     
 
     print("\nload")
     
-    df_raw = load_raw_data(raw_file)
+    df_raw = load_raw_data(raw_file) # trying to load the raw data 
     
-    if df_raw is None:
+    if df_raw is None: # if load failed stop here
         print("failed to load. Check file path.")
         return False
     
     
     print("\nvalidate")
-
+   
     validate_data(df_raw)
     show_info(df_raw)
     
     
     print("\nclean n transform")
     
-    df_clean = preprocess(df_raw.copy())
+    df_clean = preprocess(df_raw.copy()) # use .copy to preserve df_raw fir comparison
     
 
     summarise(df_raw, df_clean)
     
 
     print("\nexport ")
-    export_data(df_clean, clean_file)
+    export_data(df_clean, clean_file) #clean data to csv
     
-    print("\npipline complete\n")
+    print("\npipline complete\n") #run pipeline
     return True
 
 
 if __name__ == "__main__":
-    success = main()
+    success = main() #exit
     if not success:
         print("pipeline failed pls try again.")
