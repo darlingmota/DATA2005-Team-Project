@@ -102,19 +102,25 @@ Kaggle
 
 From the project root, run the main pipeline to load, validate, clean, and export the dataset:
 
+```bash
 python src/main.py
+```
 
-This reads data/raw/owid-energy-data.csv and writes data/processed/owid-energy-clean.csv.
+This reads `data/raw/owid-energy-data.csv` and writes `data/processed/owid-energy-clean.csv`.
 
 ### Run the analysis module
 
+```bash
 python src/analysis.py
+```
 
 Computes summary statistics, anomaly detection, top-N consumers, and aggregations on the cleaned dataset, printing key results to the console.
 
 ### Generate the visualization
 
+```bash
 python src/visualization.py
+```
 
 Produces a set of figures saved to the working directory as PNG files, including the global energy transition, regional renewables shares, GDP vs low-carbon electricity, and the carbon-intensity distribution shift.
 
