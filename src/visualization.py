@@ -200,3 +200,18 @@ if __name__ == "__main__":
     results = run_full_analysis(test_df)
 
     yearly = results["yearly"]
+    country_stats = results["by_country"]
+    peaks = results["peak_year_per_country"]
+    anomalies = results["anomalies"]
+    energy_mix = results["energy_mix"]
+
+    # Graph 1: Global electricity generation over time
+    plt.figure(figsize=(10, 6))
+    plt.plot(yearly["year"], yearly["total"])
+    plt.title("Global Electricity Generation Over Time")
+    plt.xlabel("Year")
+    plt.ylabel("Total Electricity Generation")
+    plt.grid(True)
+    plt.tight_layout()
+    plt.savefig("graph1_global_generation.png")
+    plt.show()
