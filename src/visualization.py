@@ -27,3 +27,23 @@ def aggregate_by_decade(df, value_column="electricity_generation"):
     return decade_stats
 
 def aggregate_by_country(df, 
+                         value_column="electricity_generation"):
+    country_stats = df.groupby("country")[value_column].agg(
+        total="sum",
+        mean="mean",
+        min="min",
+        max="max",
+        std="std",
+    ).reset_index()
+
+    country_stats = country_stats.sort_values("total", ascending=False)
+    return country_stats
+
+def find_peak_year_per_country(df, value_column="electricity_generation"):
+    
+    valid_df = df.dropna(subset=[value_column]).copy()
+
+    peak_idx = valid_df.groupby("country")[value_column].idxmax()
+
+    peaks = valid_df.loc[peak_idx, ["country", "year", value_column]].copy()
+    peaks = peaks.rename(columns={
