@@ -122,4 +122,58 @@ def energy_mix_shares(df):
     source_matrix = df[sources].to_numpy()
     row_totals = np.nansum(source_matrix, axis=1)
 
-    safe_totals = np.where(row_totals > 0,
+    safe_totals = np.where(row_totals > 0, row_totals, np.nan)
+    shares = source_matrix / safe_totals[:, None]
+
+    for i, source in enumerate(sources):
+        share_name = "share_" + source.replace("_electricity", "")
+        df[share_name] = shares[:, i]
+
+    return df
+
+def summary_statistics(df, value_column="electricity_generation"):
+    values = df[value_column].to_numpy()
+
+    percentiles = np.nanpercentile(values, [25, 50, 75, 95])
+
+    stats = {
+        "mean": np.nanmean(values),
+        "median": np.nanmedian(values),
+        "std": np.nanstd(values),
+        "variance": np.nanvar(values),
+        "min": np.nanmin(values),
+        "max": np.nanmax(values),
+        "percentile_25": percentiles[0],
+        "percentile_50": percentiles[1],
+        "percentile_75": percentiles[2],
+        "percentile_95": percentiles[3],
+        "n_observations": int(np.sum(~np.isnan(values))),
+    }
+    return stats
+
+def correlation_matrix(df, columns=None):
+    if columns is None:
+        columns = [
+            "electricity_generation",
+            "gdp",
+            "population",
+            "per_capita_electricity",
+            "fossil_share_elec",
+            "renewable_elec_share",
+            "nuclear_share_elec"
+        ]
+
+    columns = [c for c in columns if c in df.columns]
+    return df[columns].corr()
+
+def run_full_analysis(df, value_column="electricity_generation"):
+    countries = get_real_countries_only(df)
+
+    results = {
+        "yearly": aggregate_by_year(countries, value_column),
+        "by_decade": aggregate_by_decade(countries, value_column),
+        "by_country": aggregate_by_country(countries, value_column),
+        "peak_year_per_country": find_peak_year_per_country(countries, value_column),
+        "top_10_all_time": top_n_consumers(countries, n=10, value_column=value_column),
+        "top_10_latest_year": top_n_consumers(
+            countries,
