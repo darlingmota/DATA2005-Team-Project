@@ -215,3 +215,80 @@ if __name__ == "__main__":
     plt.tight_layout()
     plt.savefig("graph1_global_generation.png")
     plt.show()
+
+    # Graph 2: Top 10 countries by total electricity generation
+    top10 = country_stats.head(10)
+
+    plt.figure(figsize=(10, 6))
+    plt.bar(top10["country"], top10["total"])
+    plt.title("Top 10 Countries by Total Electricity Generation")
+    plt.xlabel("Country")
+    plt.ylabel("Total Electricity Generation")
+    plt.xticks(rotation=45, ha="right")
+    plt.tight_layout()
+    plt.savefig("graph2_top10_countries.png")
+    plt.show()
+
+    # Graph 3: Peak electricity generation year for top countries
+    top_peaks = peaks.head(10)
+
+    plt.figure(figsize=(10, 6))
+    plt.bar(top_peaks["country"], top_peaks["peak_value"])
+    plt.title("Peak Electricity Generation by Country")
+    plt.xlabel("Country")
+    plt.ylabel("Peak Generation Value")
+    plt.xticks(rotation=45, ha="right")
+    plt.tight_layout()
+    plt.savefig("graph3_peak_generation.png")
+    plt.show()
+
+    # Graph 4: Anomalies by year
+    plt.figure(figsize=(10, 6))
+    plt.scatter(anomalies["year"], anomalies["z_score"])
+    plt.title("Electricity Generation Anomalies")
+    plt.xlabel("Year")
+    plt.ylabel("Z-score")
+    plt.grid(True)
+    plt.tight_layout()
+    plt.savefig("graph4_anomalies.png")
+    plt.show()
+
+    # Graph 5: Average energy mix shares over time
+    mix_by_year = energy_mix.groupby("year")[
+        ["share_coal", "share_gas", "share_nuclear", "share_hydro", "share_renewables"]
+    ].mean().reset_index()
+
+    plt.figure(figsize=(10, 6))
+    plt.plot(mix_by_year["year"], mix_by_year["share_coal"], label="Coal")
+    plt.plot(mix_by_year["year"], mix_by_year["share_gas"], label="Gas")
+    plt.plot(mix_by_year["year"], mix_by_year["share_nuclear"], label="Nuclear")
+    plt.plot(mix_by_year["year"], mix_by_year["share_hydro"], label="Hydro")
+    plt.plot(mix_by_year["year"], mix_by_year["share_renewables"], label="Renewables")
+
+    plt.title("Average Electricity Mix Shares Over Time")
+    plt.xlabel("Year")
+    plt.ylabel("Average Share")
+    plt.legend()
+    plt.grid(True)
+    plt.tight_layout()
+    plt.savefig("graph5_energy_mix_shares.png")
+    plt.show()
+
+    print("\n--- Summary Statistics (electricity_generation) ---")
+    for key, value in results["summary"].items():
+        print(f"  {key:20s}: {value:,.2f}")
+
+    print("\n--- Top 10 Consumers ---")
+    print(results["top_10_all_time"].to_string(index=False))
+
+    print("\n--- Top 5 Anomalies Found ---")
+    print(results["anomalies"].head().to_string(index=False))
+
+    print("\nGraphs saved successfully:")
+    print("graph1_global_generation.png")
+    print("graph2_top10_countries.png")
+    print("graph3_peak_generation.png")
+    print("graph4_anomalies.png")
+    print("graph5_energy_mix_shares.png")
+
+    print("\nAnalysis complete.")
