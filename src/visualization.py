@@ -1,294 +1,156 @@
-import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+import seaborn as sns
 
-def get_real_countries_only(df):
-    countries_only = df[df["iso_code"].notna()].copy()
-    return countries_only
+# Load spreadsheet
+df = pd.read_excel("World Energy Consumption.xlsx")
 
-def aggregate_by_year(df, value_column="electricity_generation"):
-    yearly = df.groupby("year")[value_column].agg(
-        total="sum",
-        mean="mean",
-        median="median",
-        std="std",
-    ).reset_index()
-    return yearly
+sns.set_theme(style="whitegrid")
 
-def aggregate_by_decade(df, value_column="electricity_generation"):
-    df = df.copy()
-    df["decade"] = (df["year"] // 10) * 10
+# -----------------------------
+# GRAPH 1: Global Energy Transition
+# -----------------------------
+world = df[df["country"] == "World"].copy()
+world = world.dropna(subset=["fossil_fuel_consumption", "renewables_consumption"])
 
-    decade_stats = df.groupby("decade")[value_column].agg(
-        total="sum",
-        mean="mean",
-        std="std",
-    ).reset_index()
-    return decade_stats
+plt.figure(figsize=(10, 5))
+plt.stackplot(
+    world["year"],
+    world["fossil_fuel_consumption"],
+    world["renewables_consumption"],
+    labels=["Fossil", "Renewables"],
+    colors=["dimgray", "mediumseagreen"]
+)
+plt.title("Global Energy Transition")
+plt.xlabel("")
+plt.ylabel("")
+plt.legend(loc="upper left")
+plt.tight_layout()
+plt.savefig("1_global_energy_transition.png")
+plt.show()
 
-def aggregate_by_country(df, value_column="electricity_generation"):
-    country_stats = df.groupby("country")[value_column].agg(
-        total="sum",
-        mean="mean",
-        min="min",
-        max="max",
-        std="std",
-    ).reset_index()
 
-    country_stats = country_stats.sort_values("total", ascending=False)
-    return country_stats
+# -----------------------------
+# GRAPH 2: Renewables Share by Continent
+# -----------------------------
+continents = ["Africa", "Asia", "Europe", "North America", "Oceania", "South America"]
 
-def find_peak_year_per_country(df, value_column="electricity_generation"):
-    # FIXED: remove rows where electricity_generation is missing
-    valid_df = df.dropna(subset=[value_column]).copy()
+continent_df = df[
+    (df["country"].isin(continents)) &
+    (df["year"] >= 2000) &
+    (df["renewables_share_elec"].notna())
+].copy()
 
-    peak_idx = valid_df.groupby("country")[value_column].idxmax()
+plt.figure(figsize=(10, 5))
+sns.violinplot(
+    data=continent_df,
+    x="country",
+    y="renewables_share_elec"
+)
+plt.xlabel("country")
+plt.ylabel("renewables_share_elec")
+plt.tight_layout()
+plt.savefig("2_renewables_share_violin.png")
+plt.show()
 
-    peaks = valid_df.loc[peak_idx, ["country", "year", value_column]].copy()
-    peaks = peaks.rename(columns={
-        "year": "peak_year",
-        value_column: "peak_value"
-    })
 
-    peaks = peaks.sort_values("peak_value", ascending=False).reset_index(drop=True)
-    return peaks
+# -----------------------------
+# GRAPH 3: Top 5 Countries Energy Source Comparison
+# -----------------------------
+latest_year = df["year"].max()
 
-def top_n_consumers(df, n=10, value_column="electricity_generation", year=None):
-    if year is not None:
-        one_year = df[df["year"] == year].copy()
-        top = one_year.nlargest(n, value_column)
-        top = top[["country", "year", value_column]]
-    else:
-        totals = df.groupby("country")[value_column].sum().reset_index()
-        top = totals.nlargest(n, value_column)
+top_countries = ["China", "United States", "India", "Russia", "Japan"]
 
-    return top.reset_index(drop=True)
+top_df = df[
+    (df["country"].isin(top_countries)) &
+    (df["year"] == latest_year)
+].copy()
 
-def detect_consumption_anomalies(df, value_column="electricity_generation", z_threshold=3.0):
-    df = df.copy()
+melted = top_df.melt(
+    id_vars=["country"],
+    value_vars=["coal_consumption", "gas_consumption", "renewables_consumption"],
+    var_name="variable",
+    value_name="value"
+)
 
-    country_mean = df.groupby("country")[value_column].transform("mean")
-    country_std = df.groupby("country")[value_column].transform("std")
+plt.figure(figsize=(10, 5))
+sns.barplot(
+    data=melted,
+    x="country",
+    y="value",
+    hue="variable"
+)
+plt.xlabel("country")
+plt.ylabel("value")
+plt.tight_layout()
+plt.savefig("3_top5_energy_sources.png")
+plt.show()
 
-    df["z_score"] = np.where(
-        country_std > 0,
-        (df[value_column] - country_mean) / country_std,
-        0.0,
-    )
 
-    anomalies = df[np.abs(df["z_score"]) > z_threshold].copy()
-    anomalies = anomalies[["country", "year", value_column, "z_score"]]
-    anomalies = anomalies.sort_values("z_score", key=np.abs, ascending=False)
-    return anomalies.reset_index(drop=True)
+# -----------------------------
+# GRAPH 4: Statistical Shift in Carbon Intensity
+# -----------------------------
+carbon_df = df[
+    (df["country"].notna()) &
+    (df["iso_code"].notna()) &
+    (df["year"].isin([2000, 2021])) &
+    (df["carbon_intensity_elec"].notna())
+].copy()
 
-def per_capita_normalisation(df, value_column="electricity_generation"):
-    df = df.copy()
+plt.figure(figsize=(10, 5))
 
-    values = df[value_column].to_numpy()
-    population = df["population"].to_numpy()
+sns.kdeplot(
+    data=carbon_df[carbon_df["year"] == 2000],
+    x="carbon_intensity_elec",
+    fill=True,
+    label="Year 2000"
+)
 
-    result = np.full_like(values, np.nan, dtype=float)
-    valid = (population > 0) & ~np.isnan(population)
-    result[valid] = values[valid] / population[valid]
+sns.kdeplot(
+    data=carbon_df[carbon_df["year"] == 2021],
+    x="carbon_intensity_elec",
+    fill=True,
+    label="Year 2021"
+)
 
-    new_col = value_column + "_per_capita"
-    df[new_col] = result
-    return df
+plt.title("Statistical Shift in Carbon Intensity")
+plt.xlabel("carbon_intensity_elec")
+plt.ylabel("Density")
+plt.legend()
+plt.tight_layout()
+plt.savefig("4_carbon_intensity_shift.png")
+plt.show()
 
-def zscore_across_countries(df, value_column="electricity_generation"):
-    df = df.copy()
 
-    year_mean = df.groupby("year")[value_column].transform("mean")
-    year_std = df.groupby("year")[value_column].transform("std")
+# -----------------------------
+# GRAPH 5: Energy Per Capita by Continent
+# -----------------------------
+facet_df = df[
+    (df["country"].isin(continents)) &
+    (df["year"] >= 2000) &
+    (df["energy_per_capita"].notna())
+].copy()
 
-    df[value_column + "_zscore"] = np.where(
-        year_std > 0,
-        (df[value_column] - year_mean) / year_std,
-        0.0,
-    )
-    return df
+g = sns.FacetGrid(
+    facet_df,
+    col="country",
+    col_wrap=3,
+    height=3,
+    sharey=True
+)
 
-def energy_mix_shares(df):
-    df = df.copy()
+g.map_dataframe(
+    sns.lineplot,
+    x="year",
+    y="energy_per_capita",
+    marker="o",
+    color="purple"
+)
 
-    sources = [
-        "coal_electricity",
-        "gas_electricity",
-        "nuclear_electricity",
-        "hydro_electricity",
-        "renewables_electricity"
-    ]
+g.set_axis_labels("year", "energy_per_capita")
+g.set_titles("country = {col_name}")
+plt.tight_layout()
+plt.savefig("5_energy_per_capita_facets.png")
+plt.show()
 
-    source_matrix = df[sources].to_numpy()
-    row_totals = np.nansum(source_matrix, axis=1)
-
-    safe_totals = np.where(row_totals > 0, row_totals, np.nan)
-    shares = source_matrix / safe_totals[:, None]
-
-    for i, source in enumerate(sources):
-        share_name = "share_" + source.replace("_electricity", "")
-        df[share_name] = shares[:, i]
-
-    return df
-
-def summary_statistics(df, value_column="electricity_generation"):
-    values = df[value_column].to_numpy()
-
-    percentiles = np.nanpercentile(values, [25, 50, 75, 95])
-
-    stats = {
-        "mean": np.nanmean(values),
-        "median": np.nanmedian(values),
-        "std": np.nanstd(values),
-        "variance": np.nanvar(values),
-        "min": np.nanmin(values),
-        "max": np.nanmax(values),
-        "percentile_25": percentiles[0],
-        "percentile_50": percentiles[1],
-        "percentile_75": percentiles[2],
-        "percentile_95": percentiles[3],
-        "n_observations": int(np.sum(~np.isnan(values))),
-    }
-    return stats
-
-def correlation_matrix(df, columns=None):
-    if columns is None:
-        columns = [
-            "electricity_generation",
-            "gdp",
-            "population",
-            "per_capita_electricity",
-            "fossil_share_elec",
-            "renewable_elec_share",
-            "nuclear_share_elec"
-        ]
-
-    columns = [c for c in columns if c in df.columns]
-    return df[columns].corr()
-
-def run_full_analysis(df, value_column="electricity_generation"):
-    countries = get_real_countries_only(df)
-
-    results = {
-        "yearly": aggregate_by_year(countries, value_column),
-        "by_decade": aggregate_by_decade(countries, value_column),
-        "by_country": aggregate_by_country(countries, value_column),
-        "peak_year_per_country": find_peak_year_per_country(countries, value_column),
-        "top_10_all_time": top_n_consumers(countries, n=10, value_column=value_column),
-        "top_10_latest_year": top_n_consumers(
-            countries,
-            n=10,
-            value_column=value_column,
-            year=int(countries["year"].max())
-        ),
-        "anomalies": detect_consumption_anomalies(countries, value_column),
-        "per_capita": per_capita_normalisation(countries, value_column),
-        "zscore_by_year": zscore_across_countries(countries, value_column),
-        "energy_mix": energy_mix_shares(countries),
-        "summary": summary_statistics(countries, value_column),
-        "correlations": correlation_matrix(countries),
-    }
-
-    return results
-
-if __name__ == "__main__":
-    print("Running analysis.py self-test...")
-
-    test_df = pd.read_excel("World Energy Consumption.xlsx")
-    print(f"Loaded {len(test_df)} rows.")
-
-    results = run_full_analysis(test_df)
-
-    yearly = results["yearly"]
-    country_stats = results["by_country"]
-    peaks = results["peak_year_per_country"]
-    anomalies = results["anomalies"]
-    energy_mix = results["energy_mix"]
-
-    # Graph 1: Global electricity generation over time
-    plt.figure(figsize=(10, 6))
-    plt.plot(yearly["year"], yearly["total"])
-    plt.title("Global Electricity Generation Over Time")
-    plt.xlabel("Year")
-    plt.ylabel("Total Electricity Generation")
-    plt.grid(True)
-    plt.tight_layout()
-    plt.savefig("graph1_global_generation.png")
-    plt.show()
-
-    # Graph 2: Top 10 countries by total electricity generation
-    top10 = country_stats.head(10)
-
-    plt.figure(figsize=(10, 6))
-    plt.bar(top10["country"], top10["total"])
-    plt.title("Top 10 Countries by Total Electricity Generation")
-    plt.xlabel("Country")
-    plt.ylabel("Total Electricity Generation")
-    plt.xticks(rotation=45, ha="right")
-    plt.tight_layout()
-    plt.savefig("graph2_top10_countries.png")
-    plt.show()
-
-    # Graph 3: Peak electricity generation year for top countries
-    top_peaks = peaks.head(10)
-
-    plt.figure(figsize=(10, 6))
-    plt.bar(top_peaks["country"], top_peaks["peak_value"])
-    plt.title("Peak Electricity Generation by Country")
-    plt.xlabel("Country")
-    plt.ylabel("Peak Generation Value")
-    plt.xticks(rotation=45, ha="right")
-    plt.tight_layout()
-    plt.savefig("graph3_peak_generation.png")
-    plt.show()
-
-    # Graph 4: Anomalies by year
-    plt.figure(figsize=(10, 6))
-    plt.scatter(anomalies["year"], anomalies["z_score"])
-    plt.title("Electricity Generation Anomalies")
-    plt.xlabel("Year")
-    plt.ylabel("Z-score")
-    plt.grid(True)
-    plt.tight_layout()
-    plt.savefig("graph4_anomalies.png")
-    plt.show()
-
-    # Graph 5: Average energy mix shares over time
-    mix_by_year = energy_mix.groupby("year")[
-        ["share_coal", "share_gas", "share_nuclear", "share_hydro", "share_renewables"]
-    ].mean().reset_index()
-
-    plt.figure(figsize=(10, 6))
-    plt.plot(mix_by_year["year"], mix_by_year["share_coal"], label="Coal")
-    plt.plot(mix_by_year["year"], mix_by_year["share_gas"], label="Gas")
-    plt.plot(mix_by_year["year"], mix_by_year["share_nuclear"], label="Nuclear")
-    plt.plot(mix_by_year["year"], mix_by_year["share_hydro"], label="Hydro")
-    plt.plot(mix_by_year["year"], mix_by_year["share_renewables"], label="Renewables")
-
-    plt.title("Average Electricity Mix Shares Over Time")
-    plt.xlabel("Year")
-    plt.ylabel("Average Share")
-    plt.legend()
-    plt.grid(True)
-    plt.tight_layout()
-    plt.savefig("graph5_energy_mix_shares.png")
-    plt.show()
-
-    print("\n--- Summary Statistics (electricity_generation) ---")
-    for key, value in results["summary"].items():
-        print(f"  {key:20s}: {value:,.2f}")
-
-    print("\n--- Top 10 Consumers ---")
-    print(results["top_10_all_time"].to_string(index=False))
-
-    print("\n--- Top 5 Anomalies Found ---")
-    print(results["anomalies"].head().to_string(index=False))
-
-    print("\nGraphs saved successfully:")
-    print("graph1_global_generation.png")
-    print("graph2_top10_countries.png")
-    print("graph3_peak_generation.png")
-    print("graph4_anomalies.png")
-    print("graph5_energy_mix_shares.png")
-
-    print("\nAnalysis complete.")
+print("All 5 graphs saved successfully.")
